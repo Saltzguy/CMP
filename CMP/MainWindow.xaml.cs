@@ -12,11 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using DYMO;
 using DYMO.Label.Framework;
 using DYMO.Common;
 using System.Drawing;
 using QRCoder;
+
 
 namespace CMP
 {
@@ -68,6 +70,15 @@ namespace CMP
             var qrCode = new QRCode(qrCodeData);
             Bitmap bmp = qrCode.GetGraphic(20);
             bmp.Save("Test");
+
+            PrintDialog printDialog = new PrintDialog();
+            Nullable<Boolean> print = printDialog.ShowDialog();
+            if(print == true)
+            {
+
+                var printerSelected = printDialog.PrintQueue.Description;
+                MessageBox.Show(printerSelected);
+            }
 
 
 
