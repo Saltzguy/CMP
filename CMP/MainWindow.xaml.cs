@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using DYMO;
 using DYMO.Label.Framework;
 using DYMO.Common;
+using System.Drawing;
+using QRCoder;
 
 namespace CMP
 {
@@ -36,20 +38,42 @@ namespace CMP
         {
             label = new LabelInformation(); 
             label.techID = Environment.UserName;
-            label.date = System.DateTime.Now;
+            label.date = DateTime.Now;
+            
             DateTimeTextBox.Text = label.date.ToString();
             TechIDTextBox.Text = label.techID;
+
+        }
+        //This method will look up the associate's id and add the assocate Name in the text box
+        private void IDTextChangeHandler(object sender, TextChangedEventArgs e)
+        {
 
         }
 
         private void PrintLabelButton_Click(object sender, RoutedEventArgs e)
         {
-            var incText = INCTextBox.Text;
-            var nameText = AssociateNameTextBox.Text;
-            var damageText = DamagedComboBox.Text;
-            MessageBox.Show(incText + nameText + damageText);
+           
             
+            label.inc = INCTextBox.Text;
+            label.wiped = (bool)WipedCheckBox.IsChecked ? "Yes" : "No";
+            label.returnToUser = (bool)ReturnToUserCheckBox.IsChecked ? "Yes" : "No";
+            label.assocaiteName = AssociateNameTextBox.Text;
+            label.deviceType = DeviceTypeTextBox.Text;
+            label.associateID = AssociateIDTextBox.Text;
+            label.damage = DamagedComboBox.Text;
+            
+            //QR test code will work on making this better
+            var qrCodeGenerator = new QRCodeGenerator();
+            var qrCodeData = qrCodeGenerator.CreateQrCode(label.inc, QRCodeGenerator.ECCLevel.H);
+            var qrCode = new QRCode(qrCodeData);
+            Bitmap bmp = qrCode.GetGraphic(20);
+            bmp.Save("Test");
+
+
+
         }
+
+      
     }
             
 }
